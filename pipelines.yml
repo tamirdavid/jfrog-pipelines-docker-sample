@@ -16,6 +16,7 @@ resources:
       imageTag: latest
       autoPull: true
       
+      
   - name: dbp_build_info
     type: BuildInfo
     configuration:
@@ -46,6 +47,9 @@ pipelines:
             - name: dbp_repo
           integrations:
             - name: artifactory_integration                           # <-- replace with your artifactory integration
+         execution:
+           onStart:
+             - env | grep int_artifactory_integration_url
 
       - name: docker_push
         type: DockerPush
@@ -58,6 +62,9 @@ pipelines:
             - name: docker_build
           outputResources:
             - name: busybox_image_1
+        execution:
+          onStart:
+            - env
 
       - name: publish_dbp_build
         type: PublishBuildInfo
